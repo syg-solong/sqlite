@@ -27,6 +27,20 @@ fn connection_change_count() {
 }
 
 #[test]
+fn connection_last_inserted_rawid() {
+    let connection = setup_users(":memory:");
+    assert_eq!(connection.last_insert_rowid(), 1);
+
+    ok!(connection.execute("INSERT INTO users VALUES (2, 'Bob', NULL, NULL, NULL)"));
+    assert_eq!(connection.last_insert_rowid(), 2);
+
+    ok!(connection.execute("DELETE FROM users"));
+
+    ok!(connection.execute("INSERT INTO users VALUES (2, 'Bob', NULL, NULL, NULL)"));
+    assert_eq!(connection.last_insert_rowid(), 1);
+}
+
+#[test]
 fn connection_error() {
     let connection = setup_users(":memory:");
     match connection.execute(":)") {

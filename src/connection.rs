@@ -122,6 +122,15 @@ impl Connection {
         unsafe { ffi::sqlite3_total_changes(self.raw) as usize }
     }
 
+    /// Return the rowid of the most recent successful INSERT into a rowid
+    /// table or virtual table on database connection.
+    /// If no successful INSERTs into rowid tables have ever occurred on the
+    /// database, then returns zero.
+    #[inline]
+    pub fn last_insert_rowid(&self) -> i64 {
+        unsafe { ffi::sqlite3_last_insert_rowid(self.raw) as i64 }
+    }
+
     /// Set a callback for handling busy events.
     ///
     /// The callback is triggered when the database cannot perform an operation
